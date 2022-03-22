@@ -5,14 +5,17 @@
 module.exports = (options = {}) => {
   return async context => {
     if (!context.params.provider) return context;
+    if (!context.params.query) return context;
     const sequelize = context.app.get('sequelizeClient');
     const query = context.params.query;
+    const $include = query.$include ? [...query.$include] : [];
     context.params.sequelize = {
       distinct: query.$distinct,
-      include: typeof query.$include === 'object' ? query.$include.map((include) => buildIncludes(include, sequelize.models)) : [],
+      include: $include ? $include.map((include) => buildIncludes(include, sequelize.models)) : [],
       raw: false
     };
     delete context.params.query.$include;
+    delete context.params.query.$distinct;
     return context;
   };
 };

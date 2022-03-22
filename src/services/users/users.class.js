@@ -5,6 +5,10 @@ exports.Users = class Users extends Service {
         super(options, app);
         this.app = app;
     }
+    async create(data, params) {
+        console.log(data);
+        return await super.create(data, params);
+    }
     async get(id, params) {
         const sequelize = this.app.get('sequelizeClient');
         params.sequelize = {
