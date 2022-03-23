@@ -4,7 +4,7 @@ module.exports = (app) => {
     let mime = 'image/jpeg';
     try {
       const data = await app.service(service).get(id);
-      // res.set('Content-Type', data.file_mime ? data.file_mime : mime);
+      console.log(data);
       if (data.filename)
         res.setHeader('Content-Disposition', 'attachment; filename=' + data.filename);
       res.setHeader('Content-type', data.file_mime ? data.file_mime : mime);
