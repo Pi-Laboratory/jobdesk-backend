@@ -3,7 +3,7 @@ const { Service } = require('feathers-sequelize');
 exports.Jobs = class Jobs extends Service {
     async get(id, params) {
         const data = await super.get(id, params);
-        if(params.provider)
+        if (params.provider)
             data.file = `/cdn/jobs/${id}/file`;
         return data;
     }

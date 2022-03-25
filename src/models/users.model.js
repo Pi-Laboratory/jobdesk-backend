@@ -23,6 +23,10 @@ module.exports = function (app) {
     type: {
       type: DataTypes.ENUM(['administrator', 'employee']),
       allowNull: false
+    },
+    role: {
+      type: DataTypes.STRING,
+      allowNull: false
     }
 
   }, {

@@ -21,6 +21,11 @@ module.exports = function (app) {
     file: {
       type: DataTypes.BLOB,
       allowNull: true
+    },
+    status: {
+      type: DataTypes.BOOLEAN,
+      allowNull: true,
+      defaultValue: false
     }
   }, {
     hooks: {
@@ -33,6 +38,7 @@ module.exports = function (app) {
   // eslint-disable-next-line no-unused-vars
   jobs.associate = function (models) {
     jobs.belongsTo(models.desks, { onDelete: 'cascade' });
+    jobs.hasMany(models.references, { onDelete: 'cascade', as: 'references', foreignKey: 'source_id' });
     // Define associations here
     // See https://sequelize.org/master/manual/assocs.html
   };
