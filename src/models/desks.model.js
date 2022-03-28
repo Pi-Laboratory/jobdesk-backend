@@ -14,24 +14,36 @@ module.exports = function (app) {
       type: DataTypes.DATEONLY,
       allowNull: false
     },
-    photo: {
-      type: DataTypes.BLOB,
-      allowNull: false
-    },
     check_in: {
       type: DataTypes.TIME,
+      allowNull: false
+    },
+    check_in_photo: {
+      type: DataTypes.BLOB,
       allowNull: false
     },
     check_in_location: {
       type: DataTypes.JSONB,
       allowNull: false
     },
+    check_in_delay: {
+      type: DataTypes.INTEGER,
+      allowNull: false
+    },
     check_out: {
       type: DataTypes.TIME,
       allowNull: true
     },
+    check_out_photo: {
+      type: DataTypes.BLOB,
+      allowNull: true
+    },
     check_out_location: {
       type: DataTypes.JSONB,
+      allowNull: true
+    },
+    check_out_delay: {
+      type: DataTypes.INTEGER,
       allowNull: true
     },
   }, {

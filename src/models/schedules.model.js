@@ -25,6 +25,10 @@ module.exports = function (app) {
     close_time: {
       type: DataTypes.TIME,
       allowNull: false
+    },
+    tolerance: {
+      type: DataTypes.INTEGER,
+      allowNull: false
     }
   }, {
     hooks: {

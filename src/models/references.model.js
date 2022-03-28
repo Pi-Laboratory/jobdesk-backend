@@ -16,8 +16,8 @@ module.exports = function (app) {
 
   // eslint-disable-next-line no-unused-vars
   references.associate = function (models) {
-    references.belongsTo(models.jobs, { onDelete: 'cascade', as: 'source' });
-    references.belongsTo(models.jobs, { onDelete: 'cascade', as: 'refer' });
+    references.belongsTo(models.jobs, { onDelete: 'cascade', as: 'source', foreignKey: 'source_id' });
+    references.belongsTo(models.jobs, { onDelete: 'cascade', as: 'refer', foreignKey: 'refer_id' });
     // Define associations here
     // See https://sequelize.org/master/manual/assocs.html
   };

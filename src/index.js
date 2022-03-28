@@ -28,7 +28,8 @@ server.on('listening', () => {
             open_time: '07:45:00',
             break_time_start: '12:00:00',
             break_time_stop: '13:00:00',
-            close_time: day != 5 ? '16:45:00' : '13:00:00'
+            close_time: day != 5 ? '16:45:00' : '13:00:00',
+            tolerance: 15
           });
         }
       }

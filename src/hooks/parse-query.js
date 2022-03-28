@@ -16,6 +16,7 @@ module.exports = (options = {}) => {
     };
     delete context.params.query.$include;
     delete context.params.query.$distinct;
+    console.log(context);
     return context;
   };
 };
@@ -26,6 +27,7 @@ function buildIncludes(m, models) {
       delete m.$select[m.$select.indexOf('password')];
   }
   const parsed = {
+    as: m.$as,
     required: m.$required,
     where: m.$where,
     model: models[m.model],
