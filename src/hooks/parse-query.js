@@ -16,7 +16,6 @@ module.exports = (options = {}) => {
     };
     delete context.params.query.$include;
     delete context.params.query.$distinct;
-    console.log(context);
     return context;
   };
 };

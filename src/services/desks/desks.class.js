@@ -23,6 +23,7 @@ exports.Desks = class Desks extends Service {
         collection.data.forEach((d, i) => {
             collection.data[i].check_in_photo = `/cdn/desks/${d.id}/check_in_photo`;
             collection.data[i].check_out_photo = `/cdn/desks/${d.id}/check_out_photo`;
+            collection.data[i].check_in_on_time = collection.data[i].check_in_delay <= 0;
             if (collection.data[i].jobs) {
                 collection.data[i].jobs.forEach((j, k) => {
                     collection.data[i].jobs[k].dataValues.file = `/cdn/jobs/${j.id}/file`;

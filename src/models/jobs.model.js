@@ -39,6 +39,7 @@ module.exports = function (app) {
   jobs.associate = function (models) {
     jobs.belongsTo(models.desks, { onDelete: 'cascade' });
     jobs.hasMany(models.references, { onDelete: 'cascade', as: 'references', foreignKey: 'source_id' });
+    jobs.hasMany(models.references, { onDelete: 'cascade', as: 'sources', foreignKey: 'refer_id' });
     // Define associations here
     // See https://sequelize.org/master/manual/assocs.html
   };
