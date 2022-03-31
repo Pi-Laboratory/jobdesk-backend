@@ -3,10 +3,12 @@ const logger = require('./logger');
 const app = require('./app');
 const port = app.get('port');
 const server = app.listen(port);
+const moment = require('moment');
 
-process.on('unhandledRejection', (reason, p) =>
-  logger.error('Unhandled Rejection at: Promise ', p, reason)
-);
+process.on('unhandledRejection', (reason, p) => {
+  console.log(reason, p);
+  logger.error('Unhandled Rejection at: Promise ')
+});
 
 server.on('listening', () => {
   logger.info('Feathers application started on http://%s:%d', app.get('host'), port);
@@ -33,6 +35,7 @@ server.on('listening', () => {
           });
         }
       }
+      checkAbsence(app);
     } catch (e) {
       console.log(e);
     }
@@ -42,45 +45,79 @@ server.on('listening', () => {
 async function checkAbsence(app) {
   let skip = false;
   let previousDate = moment();
+  let schedule = (await app.service('schedules').find({
+    query: {
+      day: moment().weekday(),
+      $limit: 1
+    }
+  })).data[0];
+  const sequelize = app.get('sequelizeClient');
 
   while (true) {
+    await sleep(5000);
     const now = moment();
     if (now.diff(previousDate, 'days') === 0) {
-      if (skip) continue;
-      const schedule = (await app.service('schedules').find({
+      if (skip) {
+        previousDate = now;
+        continue;
+      }
+      if (schedule) {
+        if (now.diff(moment(schedule.close_time, [moment.ISO_8601, 'HH:mm:ss']), 'minutes') > 0) {
+          console.log('Auto create absence desks...');
+          const users = await sequelize.models.users.findAll({
+            attributes: ['id'],
+            include: [{
+              required: false,
+              model: sequelize.models.desks,
+              where: {
+                date: now
+              }
+            }]
+          });
+          for (let i = 0; i < users.length; i++) {
+            const user = users[i];
+            if (!user.desks.length) {
+              await app.service('desks').create({
+                mode: 'absent',
+                user_id: user.id
+              });
+            }
+          }
+          skip = true;
+        }
+      } else {
+        console.log('Auto create off desks...');
+        const users = await this.app.service('users').find({
+          provider: 'internal',
+          $select: ['id'],
+          $include: [{
+            model: 'desks',
+            $where: {
+              date: now
+            }
+          }]
+        });
+        for (let i = 0; i < users.data.length; i++) {
+          const user = users[i];
+          await this.app.service('desks').create({
+            mode: 'off',
+            user_id: user.id
+          });
+        }
+        skip = true;
+      }
+      previousDate = now;
+    } else {
+      skip = false;
+      previousDate = now;
+      schedule = (await app.service('schedules').find({
         query: {
           day: now.weekday(),
           $limit: 1
         }
       })).data[0];
-      if (schedule) {
-        if (now.diff(moment(`${schedule.date} ${schedule.close_time}`), 'minutes') > 0) {
-          // auto create desk absence
-          const users = await this.app.service('users').find({
-            provider: 'internal',
-            $include: [{
-              model: 'desks',
-              $required: true,
-              $where: {
-                date: now
-              }
-            }]
-          });
-          for (let i = 0; i < users.data.length; i++) {
-            
-          }
-          skip = true;
-          previousDate = now;
-        } else {
-          skip = false;
-          previousDate = now;
-        }
-        continue;
-      } else {
-      }
-    } else {
     }
   }
-
-
 }
+
+let sleep = ms => new Promise(resolve => setTimeout(resolve, ms))

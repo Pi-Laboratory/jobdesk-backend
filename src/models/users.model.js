@@ -40,6 +40,7 @@ module.exports = function (app) {
   // eslint-disable-next-line no-unused-vars
   users.associate = function (models) {
     users.belongsTo(models.departments, { onDelete: 'cascade' });
+    users.hasMany(models.desks, { onDelete: 'cascade' });
     // Define associations here
     // See https://sequelize.org/master/manual/assocs.html
   };

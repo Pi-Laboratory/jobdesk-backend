@@ -7,8 +7,12 @@ module.exports = function (app) {
   const sequelizeClient = app.get('sequelizeClient');
   const desks = sequelizeClient.define('desks', {
     mode: {
-      type: DataTypes.ENUM(['wfo', 'wfh', 'trip']),
+      type: DataTypes.ENUM(['wfo', 'wfh', 'trip', 'sick', 'absent', 'off']),
       allowNull: false
+    },
+    sick_proof: {
+      type: DataTypes.BLOB,
+      allowNull: true
     },
     date: {
       type: DataTypes.DATEONLY,
@@ -16,19 +20,19 @@ module.exports = function (app) {
     },
     check_in: {
       type: DataTypes.TIME,
-      allowNull: false
+      allowNull: true
     },
     check_in_photo: {
       type: DataTypes.BLOB,
-      allowNull: false
+      allowNull: true
     },
     check_in_location: {
       type: DataTypes.JSONB,
-      allowNull: false
+      allowNull: true
     },
     check_in_delay: {
       type: DataTypes.INTEGER,
-      allowNull: false
+      allowNull: true
     },
     check_out: {
       type: DataTypes.TIME,

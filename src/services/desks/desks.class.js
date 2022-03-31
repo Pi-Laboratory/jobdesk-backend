@@ -41,6 +41,8 @@ exports.Desks = class Desks extends Service {
 
     async create(data, params) {
         const date = moment();
+        data.date = date;
+        if(['wfo', 'wfh', 'trip'].indexOf(data.mode) === -1) return await super.create(data, params);
         const schedule = (await this.app.service('schedules').find({
             query: {
                 day: date.day()
@@ -53,7 +55,6 @@ exports.Desks = class Desks extends Service {
         const delay = (moment.duration(date.diff(check_in_time))).asMinutes();
         data.check_in_delay = delay;
 
-        data.date = date;
         data.check_in_photo = Buffer.from(data.check_in_photo, 'base64');
         data.check_in = date.format('HH:mm:ss');
         data.user_id = params.user.id;

@@ -6,7 +6,6 @@ exports.Users = class Users extends Service {
         this.app = app;
     }
     async create(data, params) {
-        console.log(data);
         return await super.create(data, params);
     }
     async get(id, params) {
