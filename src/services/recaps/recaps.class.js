@@ -8,7 +8,6 @@ exports.Recaps = class Recaps {
   }
 
   async find(params) {
-    console.log(params);
     const result = [];
 
     for (let i = 0; i < 3; i++) {
@@ -45,14 +44,12 @@ exports.Recaps = class Recaps {
         jobs: (() => {
           const jobs = [];
           for (let i = 0; i < desks.data.length; i++) {
-            console.log(desks.data[i].jobs);
+            if (jobs.length >= 4) break;
             for (let j = 0; j < desks.data[i].jobs.length; j++) {
-              console.log('push jobs');
+              if (jobs.length >= 4) break;
               jobs.push(desks.data[i].jobs[j]);
             }
-            if (jobs.length >= 4) break;
           }
-          // console.log(jobs);
           return jobs;
         })()
       }

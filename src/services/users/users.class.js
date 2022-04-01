@@ -1,4 +1,6 @@
 const { Service } = require('feathers-sequelize');
+const { NotAcceptable } = require('@feathersjs/errors');
+const bcrypt = require('bcryptjs');
 
 exports.Users = class Users extends Service {
     constructor(options, app) {
@@ -18,5 +20,15 @@ exports.Users = class Users extends Service {
         };
         const result = await super.get(id, params);
         return result;
+    }
+    async patch(id, data, params) {
+        const user = await super.get(id);
+        if (user.type !== 'administrator')
+            if (user.id !== id) throw new NotAcceptable('You are not allowed to edit another user');
+        if (data.old_password) {
+            if (!bcrypt.compareSync(data.old_password, user.password)) throw new NotAcceptable('Password mismatch');
+            delete data.old_password;
+        }
+        return await super.patch(id, data, params);
     }
 };
