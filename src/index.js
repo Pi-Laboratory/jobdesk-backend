@@ -35,14 +35,15 @@ server.on('listening', () => {
           });
         }
       }
-      checkAbsence(app);
+      runAutoAbsence(app);
+      runNotifier(app);
     } catch (e) {
       console.log(e);
     }
   });
 });
 
-async function checkAbsence(app) {
+async function runAutoAbsence(app) {
   let skip = false;
   let previousDate = moment();
   let schedule = (await app.service('schedules').find({
@@ -63,7 +64,6 @@ async function checkAbsence(app) {
       }
       if (schedule) {
         if (now.diff(moment(schedule.close_time, [moment.ISO_8601, 'HH:mm:ss']), 'minutes') > 0) {
-          console.log('Auto create absence desks...');
           const users = await sequelize.models.users.findAll({
             attributes: ['id'],
             include: [{
@@ -120,4 +120,74 @@ async function checkAbsence(app) {
   }
 }
 
-let sleep = ms => new Promise(resolve => setTimeout(resolve, ms))
+async function runNotifier(app) {
+  let skipStart = false;
+  let skipFinish = false;
+  let previousDate = moment();
+  let schedule = (await app.service('schedules').find({
+    query: {
+      day: previousDate.weekday(),
+      $limit: 1
+    }
+  })).data[0];
+  const messaging = app.get('fcm');
+
+  while (true) {
+    await sleep(5000);
+    const now = moment();
+    if (now.diff(previousDate, 'days') === 0) {
+      if (schedule) {
+        const open = moment(schedule.open_time, [moment.ISO_8601, 'HH:mm:ss']);
+        if (now.diff(open, 'minutes') >= 0) {
+          if (!skipStart) {
+            const startMessage = {
+              notification: {
+                title: 'Waktu check-in sudah dekat',
+                body: `Segera lakukan check-in. Anda akan tercatat terlambat dalam ${schedule.tolerance} menit`
+              },
+              condition: `'unchecked' in topics`
+            }
+            try {
+              console.log('Sending open notification...');
+              const response = await messaging.send(startMessage);
+              skipStart = true;
+              console.log(response);
+            } catch (e) { console.log(e) };
+          }
+        }
+
+        const close = moment(schedule.close_time, [moment.ISO_8601, 'HH:mm:ss']);
+        if (now.diff(close, 'minutes') >= 0) {
+          if (!skipFinish) {
+            const finishMessage = {
+              notification: {
+                title: 'Waktu check-out sudah dekat',
+                body: 'Jangan lupa lakukan check-out hari ini!'
+              },
+              condition: `'checked' in topics`
+            }
+            try {
+              console.log('Sending close notification...');
+              const response = await messaging.send(finishMessage);
+              skipFinish = true;
+              console.log(response);
+            } catch (e) { console.log(e) };
+          }
+        }
+      }
+      previousDate = now;
+    } else {
+      skipStart = false;
+      skipFinish = false;
+      previousDate = now;
+      schedule = (await app.service('schedules').find({
+        query: {
+          day: now.weekday(),
+          $limit: 1
+        }
+      })).data[0];
+    }
+  }
+}
+
+let sleep = ms => new Promise(resolve => setTimeout(resolve, ms));

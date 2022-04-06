@@ -10,6 +10,8 @@ const configuration = require('@feathersjs/configuration');
 const express = require('@feathersjs/express');
 const socketio = require('@feathersjs/socketio');
 
+const { initializeApp, applicationDefault } = require('firebase-admin/app');
+const { getMessaging } = require('firebase-admin/messaging');
 
 const middleware = require('./middleware');
 const services = require('./services');
@@ -21,6 +23,13 @@ const authentication = require('./authentication');
 const sequelize = require('./sequelize');
 
 const app = express(feathers());
+
+const messaging = getMessaging(initializeApp({
+  credential: applicationDefault(),
+  projectId: 'jobdesk-notification'
+}));
+
+app.set('fcm', messaging);
 
 // Load app configuration
 app.configure(configuration());
