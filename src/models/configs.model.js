@@ -20,7 +20,7 @@ module.exports = function (app) {
     },
     company_address: {
       type: DataTypes.STRING,
-      allowNull: false
+      allowNull: true
     },
     instance_name: {
       type: DataTypes.STRING,
