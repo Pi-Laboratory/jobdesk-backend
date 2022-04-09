@@ -14,6 +14,18 @@ module.exports = function (app) {
       type: DataTypes.BLOB,
       allowNull: true
     },
+    company_name: {
+      type: DataTypes.STRING,
+      allowNull: true
+    },
+    company_address: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    instance_name: {
+      type: DataTypes.STRING,
+      allowNull: true
+    },
   }, {
     hooks: {
       beforeCount(options) {
