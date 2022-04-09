@@ -87,19 +87,19 @@ async function runAutoAbsence(app) {
         }
       } else {
         console.log('Auto create off desks...');
-        const users = await this.app.service('users').find({
-          provider: 'internal',
-          $select: ['id'],
-          $include: [{
-            model: 'desks',
-            $where: {
+        const users = await sequelize.models.users.findAll({
+          attributes: ['id'],
+          include: [{
+            required: false,
+            model: sequelize.models.desks,
+            where: {
               date: now
             }
           }]
         });
-        for (let i = 0; i < users.data.length; i++) {
+        for (let i = 0; i < users.length; i++) {
           const user = users[i];
-          await this.app.service('desks').create({
+          await app.service('desks').create({
             mode: 'off',
             user_id: user.id
           });
