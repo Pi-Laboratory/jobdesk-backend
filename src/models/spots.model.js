@@ -11,7 +11,7 @@ module.exports = function (app) {
       allowNull: false
     },
     area: {
-      type: DataTypes.GEOMETRY('POLYGON', 4326),
+      type: DataTypes.GEOMETRY('POINT', 4326),
       allowNull: false
     },
     tolerance: {
@@ -30,6 +30,7 @@ module.exports = function (app) {
   spots.associate = function (models) {
     // Define associations here
     // See http://docs.sequelizejs.com/en/latest/docs/associations/
+    spots.belongsTo(models.departments, { onDelete: 'cascade' });
   };
 
   return spots;
