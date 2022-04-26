@@ -15,7 +15,7 @@ app.get('sequelizeSync').then(async () => {
         await sleep(5000);
         const now = moment();
 
-        if (now.diff(lastMoment, 'day') > 0) {
+        if (now.get('D') !== lastMoment.get('D')) {
             skipStart = false;
             skipFinish = false;
         }
