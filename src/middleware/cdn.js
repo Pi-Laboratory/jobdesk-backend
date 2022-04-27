@@ -7,6 +7,7 @@ module.exports = (app) => {
       if (data.filename)
         res.setHeader('Content-Disposition', 'attachment; filename=' + data.filename);
       res.setHeader('Content-type', data.file_mime ? data.file_mime : mime);
+      console.log(data);
       res.send(data[col]);
     } catch (e) {
       res.status(404);

@@ -27,6 +27,10 @@ module.exports = function (app) {
     role: {
       type: DataTypes.STRING,
       allowNull: false
+    },
+    avatar: {
+      type: DataTypes.BLOB,
+      allowNull: true
     }
 
   }, {

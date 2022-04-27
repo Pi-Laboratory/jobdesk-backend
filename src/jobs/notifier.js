@@ -38,10 +38,10 @@ app.get('sequelizeSync').then(async () => {
                         condition: `'unchecked' in topics`
                     }
                     try {
-                        console.log('Sending open notification...');
+                        console.log('Sending open notification...', now);
                         const response = await messaging.send(startMessage);
                         skipStart = true;
-                        console.log(response);
+                        console.log('Sent at ', moment(), response);
                     } catch (e) { console.log(e) };
                 }
             }
@@ -57,10 +57,10 @@ app.get('sequelizeSync').then(async () => {
                         condition: `'checked' in topics`
                     }
                     try {
-                        console.log('Sending close notification...');
+                        console.log('Sending close notification...', now);
                         const response = await messaging.send(finishMessage);
                         skipFinish = true;
-                        console.log(response);
+                        console.log('Sent at ', moment(), response);
                     } catch (e) { console.log(e) };
                 }
             }

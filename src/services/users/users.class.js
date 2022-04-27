@@ -19,7 +19,16 @@ exports.Users = class Users extends Service {
             raw: false
         };
         const result = await super.get(id, params);
+        if (params.provider)
+            result.avatar = `/cdn/users/${id}/avatar`;
         return result;
+    }
+    async find(params) {
+        const collection = await super.find(params);
+        collection.data.forEach((d, i) => {
+            collection.data[i].dataValues.avatar = `/cdn/users/${d.id}/avatar`;
+        });
+        return collection;
     }
     async patch(id, data, params) {
         const user = await super.get(id);
@@ -29,6 +38,8 @@ exports.Users = class Users extends Service {
             if (!bcrypt.compareSync(data.old_password, user.password)) throw new NotAcceptable('Password mismatch');
             delete data.old_password;
         }
+        if (data.avatar)
+            data.avatar = Buffer.from(data.avatar, 'base64');
         return await super.patch(id, data, params);
     }
 };
