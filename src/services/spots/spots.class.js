@@ -8,9 +8,10 @@ exports.Spots = class Spots extends Service {
         return super.create(data);
     }
     async patch(id, data) {
+        console.log(data);
         if(data.area)
             data.area = setSRID(data.area, SRID);
-        return super.update(id, data);
+        return super.patch(id, data);
     }
 };
 
