@@ -26,7 +26,7 @@ exports.Users = class Users extends Service {
     async find(params) {
         const collection = await super.find(params);
         collection.data.forEach((d, i) => {
-            collection.data[i].dataValues.avatar = `/cdn/users/${d.id}/avatar`;
+            collection.data[i].avatar = `/cdn/users/${d.id}/avatar`;
         });
         return collection;
     }
