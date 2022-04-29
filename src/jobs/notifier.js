@@ -56,11 +56,21 @@ app.get('sequelizeSync').then(async () => {
                         },
                         condition: `'checked' in topics`
                     }
+                    const absentMessage = {
+                        notification: {
+                            title: 'Waktu bekerja akan berakhir',
+                            body: `Anda akan tercatat tidak hadir jika tidak segera check-in dalam ${schedule.tolerance} menit`
+                        },
+                        condition: `'unchecked' in topics`
+                    }
                     try {
                         console.log('Sending close notification...', now);
                         const response = await messaging.send(finishMessage);
+                        console.log('Sending absent notification...', now);
+                        const response2 = await messaging.send(absentMessage);
                         skipFinish = true;
-                        console.log('Sent at ', moment(), response);
+                        console.log('Sent (close) at ', moment(), response);
+                        console.log('Sent (absent) at ', moment(), response2);
                     } catch (e) { console.log(e) };
                 }
             }
