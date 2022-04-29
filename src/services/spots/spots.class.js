@@ -7,7 +7,7 @@ exports.Spots = class Spots extends Service {
         data.area = setSRID(data.area, SRID);
         return super.create(data);
     }
-    async update(id, data) {
+    async patch(id, data) {
         if(data.area)
             data.area = setSRID(data.area, SRID);
         return super.update(id, data);
