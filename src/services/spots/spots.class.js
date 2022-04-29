@@ -1,10 +1,16 @@
 const { Service } = require('feathers-sequelize');
 
+const SRID = 4326;
+
 exports.Spots = class Spots extends Service {
     async create(data) {
-        data.area = setSRID(data.area, 4326);
-        console.log(data);
+        data.area = setSRID(data.area, SRID);
         return super.create(data);
+    }
+    async update(id, data) {
+        if(data.area)
+            data.area = setSRID(data.area, SRID);
+        return super.update(id, data);
     }
 };
 
