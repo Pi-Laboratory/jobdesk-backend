@@ -7,10 +7,10 @@ module.exports = function (app) {
   const sequelizeClient = app.get('sequelizeClient');
   const desks = sequelizeClient.define('desks', {
     mode: {
-      type: DataTypes.ENUM(['wfo', 'wfh', 'trip', 'sick', 'absent', 'off']),
+      type: DataTypes.ENUM(['wfo', 'wfh', 'trip', 'sick', 'absent', 'off', 'permit']),
       allowNull: false
     },
-    sick_proof: {
+    proof: {
       type: DataTypes.BLOB,
       allowNull: true
     },
