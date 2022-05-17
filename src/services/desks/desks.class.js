@@ -42,7 +42,7 @@ exports.Desks = class Desks extends Service {
     async create(data, params) {
         const date = moment();
         data.date = date;
-        if(['wfo', 'wfh', 'trip'].indexOf(data.mode) === -1) return await super.create(data, params);
+        if (['wfo', 'wfh', 'trip', 'sick', 'absent', 'off', 'permit'].indexOf(data.mode) === -1) return await super.create(data, params);
         const schedule = (await this.app.service('schedules').find({
             query: {
                 day: date.day()

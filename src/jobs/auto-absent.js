@@ -54,10 +54,8 @@ app.get('sequelizeSync').then(async () => {
             });
             for (let i = 0; i < users.length; i++) {
                 const user = users[i];
-                await app.service('desks').create({
-                    mode: 'off',
-                    user_id: user.id
-                });
+                if (!user.desks.length)
+                    await app.service('desks').create({ mode: 'off', user_id: user.id });
             }
         }
     }
