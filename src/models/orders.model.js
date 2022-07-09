@@ -22,6 +22,7 @@ module.exports = function (app) {
   orders.associate = function (models) {
     orders.belongsTo(models.users, { onDelete: 'cascade', as: 'from' });
     orders.belongsTo(models.users, { onDelete: 'cascade', as: 'to' });
+    orders.hasMany(models.jobs, { onDelete: 'cascade' });
     // Define associations here
     // See http://docs.sequelizejs.com/en/latest/docs/associations/
   };
