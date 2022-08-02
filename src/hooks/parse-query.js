@@ -22,8 +22,9 @@ module.exports = (options = {}) => {
 
 function buildIncludes(m, models) {
   if (m.model === 'users') {
-    if (m.$select.indexOf('password') !== -1)
-      delete m.$select[m.$select.indexOf('password')];
+    if (m.$select)
+      if (m.$select.indexOf('password') !== -1)
+        delete m.$select[m.$select.indexOf('password')];
   }
   const parsed = {
     as: m.$as,
