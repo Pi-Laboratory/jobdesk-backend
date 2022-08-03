@@ -25,6 +25,8 @@ function buildIncludes(m, models) {
     if (m.$select)
       if (m.$select.indexOf('password') !== -1)
         delete m.$select[m.$select.indexOf('password')];
+    else
+      m.$select = ['id', 'name'];
   }
   const parsed = {
     as: m.$as,
