@@ -1,9 +1,10 @@
 const Sequelize = require('sequelize');
 
 module.exports = function (app) {
-  const connectionString = app.get('postgres');
+  const dbDriver = app.get('database');
+  const connectionString = app.get(dbDriver);
   const sequelize = new Sequelize(connectionString, {
-    dialect: 'postgres',
+    dialect: dbDriver,
     logging: false,
     define: {
       freezeTableName: true,

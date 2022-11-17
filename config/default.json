@@ -28,6 +28,7 @@
       "passwordField": "password"
     }
   },
+  "database": "postgres",
   "postgres": "postgres://postgres:sirius@localhost:5432/jobdesk_backend",
   "mysql": "mysql://root:sirius@localhost:3306/jobdesk_backend"
 }
