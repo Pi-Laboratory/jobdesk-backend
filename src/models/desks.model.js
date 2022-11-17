@@ -27,7 +27,7 @@ module.exports = function (app) {
       allowNull: true
     },
     check_in_location: {
-      type: DataTypes.JSONB,
+      type: DataTypes.JSON,
       allowNull: true
     },
     check_in_delay: {
@@ -43,7 +43,7 @@ module.exports = function (app) {
       allowNull: true
     },
     check_out_location: {
-      type: DataTypes.JSONB,
+      type: DataTypes.JSON,
       allowNull: true
     },
     check_out_delay: {
